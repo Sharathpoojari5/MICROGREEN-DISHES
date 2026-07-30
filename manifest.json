@@ -1,21 +1,47 @@
 {
   "name": "Grevara Microgreens",
   "short_name": "Grevara",
-  "description": "Premium Culinary Collection: 100 global dishes elevated by Grevara Microgreens.",
+  "description": "Premium Culinary Collection: 100 global dishes elevated by Grevara Microgreens across 5 signature varieties.",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#071a12",
+  "orientation": "any",
+  "background_color": "#050a07",
   "theme_color": "#071a12",
+  "categories": ["food", "lifestyle", "health"],
   "icons": [
     {
       "src": "./assets/images/icon-192.png",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "./assets/images/icon-512.png",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Broccoli Microgreens",
+      "short_name": "Broccoli",
+      "url": "./index.html#broccoli",
+      "icons": [{ "src": "./assets/images/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Sunflower Microgreens",
+      "short_name": "Sunflower",
+      "url": "./index.html#sunflower",
+      "icons": [{ "src": "./assets/images/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Red Amaranth Microgreens",
+      "short_name": "Amaranth",
+      "url": "./index.html#red-amaranth",
+      "icons": [{ "src": "./assets/images/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }

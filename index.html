@@ -2,12 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Grevara Microgreens - Premium Culinary Collection</title>
   <meta name="description" content="100 famous global dishes elevated by Grevara Microgreens. Discover recipes, flavor pairings, and explicit value additions across 5 premium varieties." />
+  
+  <!-- PWA -->
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#071a12" />
+  
+  <!-- iOS App Meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Grevara" />
   <link rel="apple-touch-icon" href="./assets/images/icon-192.png" />
+  
+  <!-- Android -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -835,6 +847,90 @@
     }
     .footer p { margin-bottom: 0.5rem; }
 
+    /* INSTALL APP BUTTON (header) */
+    .btn-install {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 0.6rem 1.2rem;
+      background: linear-gradient(135deg, var(--gold-main), var(--gold-dark));
+      color: var(--green-dark);
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(229, 193, 88, 0.3);
+    }
+    .btn-install:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(229, 193, 88, 0.5);
+    }
+    .btn-install svg { width: 18px; height: 18px; }
+
+    /* INSTALL BANNER (bottom) */
+    .install-banner {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: linear-gradient(135deg, var(--green-main), var(--green-dark));
+      border-top: 1px solid var(--gold-subtle);
+      backdrop-filter: blur(20px);
+      padding: 1rem 1.5rem;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      animation: slideUp 0.5s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .install-banner-text {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+    .install-banner-text img {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+    }
+    .install-banner-text div strong {
+      color: var(--text-pure);
+      font-size: 0.95rem;
+      display: block;
+    }
+    .install-banner-text div span {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+    .install-banner .btn-install-banner {
+      padding: 0.65rem 1.5rem;
+      background: var(--gold-main);
+      color: var(--green-dark);
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .install-banner .btn-dismiss {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.3rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
     /* RESPONSIVE */
     @media (max-width: 1024px) {
       .modal-container { flex-direction: column; max-height: 95vh; overflow-y: auto; }
@@ -963,10 +1059,16 @@ function renderHeader() {
           <span class="header-subtitle">Global Culinary Compendium</span>
         </div>
       </a>
-      <a href="grevara-catalog.pdf" target="_blank" class="btn btn-outline">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-        Download Full Catalog
-      </a>
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <button id="installBtn" class="btn-install" onclick="installApp()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Install App
+        </button>
+        <a href="grevara-catalog.pdf" target="_blank" class="btn btn-outline">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download Full Catalog
+        </a>
+      </div>
     </header>
   `;
 }
@@ -1256,6 +1358,58 @@ document.addEventListener('keydown', e => {
 
 render();
 
+// --- PWA INSTALL LOGIC ---
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install button in header
+  setTimeout(() => {
+    const btn = document.getElementById('installBtn');
+    if (btn) btn.style.display = 'flex';
+  }, 100);
+  // Show install banner after 3 seconds
+  setTimeout(() => {
+    const banner = document.getElementById('installBanner');
+    if (banner && !sessionStorage.getItem('installDismissed')) {
+      banner.style.display = 'flex';
+    }
+  }, 3000);
+});
+
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((result) => {
+      if (result.outcome === 'accepted') {
+        console.log('App installed!');
+        const btn = document.getElementById('installBtn');
+        if (btn) btn.style.display = 'none';
+        const banner = document.getElementById('installBanner');
+        if (banner) banner.style.display = 'none';
+      }
+      deferredPrompt = null;
+    });
+  }
+}
+
+function dismissInstallBanner() {
+  const banner = document.getElementById('installBanner');
+  if (banner) banner.style.display = 'none';
+  sessionStorage.setItem('installDismissed', 'true');
+}
+
+window.addEventListener('appinstalled', () => {
+  console.log('Grevara app was installed!');
+  deferredPrompt = null;
+  const btn = document.getElementById('installBtn');
+  if (btn) btn.style.display = 'none';
+  const banner = document.getElementById('installBanner');
+  if (banner) banner.style.display = 'none';
+});
+
+// Service Worker Registration
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then(registration => {
@@ -1267,5 +1421,19 @@ if ('serviceWorker' in navigator) {
 }
 
 </script>
+
+<!-- Install Banner (fixed bottom bar) -->
+<div id="installBanner" class="install-banner">
+  <div class="install-banner-text">
+    <img src="./assets/images/icon-192.png" alt="Grevara" />
+    <div>
+      <strong>Install Grevara</strong>
+      <span>Get the full app experience</span>
+    </div>
+  </div>
+  <button class="btn-install-banner" onclick="installApp()">Install</button>
+  <button class="btn-dismiss" onclick="dismissInstallBanner()">✕</button>
+</div>
+
 </body>
 </html>
