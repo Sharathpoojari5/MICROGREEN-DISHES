@@ -1601,13 +1601,11 @@ function renderTabs() {
     <div class="variety-tabs-wrapper anim" style="animation-delay: 0.1s;">
       <div class="variety-tabs">
         <button class="v-tab ${S.variety === 'all' ? 'active' : ''}" onclick="setFilter('v', 'all')">
-          <div class="v-tab-img" style="background: var(--green-dark); display:flex; align-items:center; justify-content:center; font-size:1.15rem;">🌱</div>
-          <span class="v-tab-text">All Varieties</span>
+          <span class="v-tab-text">🌱 All Varieties</span>
           <span class="v-count">100</span>
         </button>
         ${vars.map(v => `
           <button class="v-tab ${S.variety === v.id ? 'active' : ''}" onclick="setFilter('v', '${v.id}')" ${S.variety === v.id ? `style="box-shadow: 0 0 15px ${v.accentColor}40; border-color: ${v.accentColor};"` : ''}>
-            <img src="${v.coverImage}" class="v-tab-img" alt="${escapeHTML(v.name)}" onerror="this.src='${fb}'" />
             <span class="v-tab-text">${v.icon} ${escapeHTML(v.name)}</span>
             <span class="v-count">20</span>
           </button>
