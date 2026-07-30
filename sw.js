@@ -1,4 +1,4 @@
-const CACHE_NAME = "grevara-cache-v2";
+const CACHE_NAME = "grevara-cache-v4";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
