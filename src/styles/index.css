@@ -1,0 +1,81 @@
+/* Custom Grevara Design System Tokens */
+
+:root {
+  --color-emerald-dark: #072218;
+  --color-emerald-deep: #0D3B2B;
+  --color-emerald-accent: #1B5E46;
+  --color-gold-bright: #F4C430;
+  --color-gold-accent: #D4AF37;
+  --color-gold-deep: #AA820A;
+  --color-parchment: #FBF8F1;
+  --color-parchment-dark: #F2ECE1;
+  --color-ink-dark: #1F2925;
+  --color-ink-muted: #4A5B53;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-subserif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-emerald-dark);
+  color: var(--color-ink-dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(27, 94, 70, 0.4) 0%, transparent 75%),
+    radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.08) 0%, transparent 50%);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(7, 34, 24, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold-accent);
+  border-radius: 3px;
+}
+
+/* Typography Helpers */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-subserif {
+  font-family: var(--font-subserif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Custom Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s infinite ease-in-out;
+}

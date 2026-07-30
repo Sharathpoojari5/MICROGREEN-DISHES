@@ -1,0 +1,195 @@
+/* Book Realistic Layout & 3D CSS Effects */
+
+.book-container {
+  perspective: 2000px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 10px;
+}
+
+.book-frame {
+  position: relative;
+  width: 100%;
+  background: var(--color-emerald-deep);
+  border: 12px solid #092B20;
+  border-radius: 16px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(212, 175, 55, 0.2),
+    inset 0 0 15px rgba(0, 0, 0, 0.8);
+  overflow: visible;
+  transition: all 0.3s ease;
+}
+
+/* Two-Page Spread */
+.book-spread {
+  display: flex;
+  width: 100%;
+  min-height: 780px;
+  background-color: var(--color-parchment);
+  border-radius: 8px;
+  position: relative;
+  box-shadow: inset 0 0 40px rgba(180, 160, 120, 0.3);
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 0%, transparent 5%, transparent 95%, rgba(0, 0, 0, 0.05) 100%),
+    radial-gradient(ellipse at center, transparent 60%, rgba(210, 195, 170, 0.2) 100%);
+}
+
+/* Center Spine Shadow */
+.book-spine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to right, 
+    rgba(0, 0, 0, 0.25) 0%, 
+    rgba(0, 0, 0, 0.05) 40%, 
+    rgba(0, 0, 0, 0.4) 50%, 
+    rgba(0, 0, 0, 0.05) 60%, 
+    rgba(0, 0, 0, 0.25) 100%
+  );
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Book Left & Right Pages */
+.book-page-left, .book-page-right {
+  flex: 1;
+  padding: 40px 45px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-y: auto;
+  max-height: 820px;
+}
+
+.book-page-left {
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: inset -15px 0 20px -10px rgba(0, 0, 0, 0.15);
+}
+
+.book-page-right {
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: inset 15px 0 20px -10px rgba(0, 0, 0, 0.15);
+}
+
+/* Page Corner Turn Curl Effect */
+.page-curl-corner-right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 35px 35px;
+  border-color: transparent transparent rgba(0, 0, 0, 0.15) transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.page-curl-corner-right:hover {
+  border-width: 0 0 50px 50px;
+  border-color: transparent transparent var(--color-gold-accent) transparent;
+}
+
+.page-curl-corner-left {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 35px 35px 0;
+  border-color: transparent rgba(0, 0, 0, 0.15) transparent transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.page-curl-corner-left:hover {
+  border-width: 0 50px 50px 0;
+  border-color: transparent var(--color-gold-accent) transparent transparent;
+}
+
+/* Chapter Side Tabs (Ribbon Tabs along right/left edges) */
+.chapter-tabs-container {
+  position: absolute;
+  right: -52px;
+  top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 30;
+}
+
+.chapter-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px 10px 12px;
+  background: var(--color-emerald-deep);
+  color: var(--color-gold-accent);
+  border: 1px solid var(--color-gold-accent);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  font-family: var(--font-subserif);
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.4);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.chapter-tab:hover, .chapter-tab.active {
+  transform: translateX(8px);
+  background: var(--color-gold-accent);
+  color: var(--color-emerald-dark);
+  border-color: var(--color-gold-bright);
+}
+
+.chapter-tab.active {
+  box-shadow: 6px 6px 15px rgba(212, 175, 55, 0.5);
+}
+
+/* Mobile responsive single page layout */
+@media (max-width: 1024px) {
+  .book-spread {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .book-spine {
+    display: none;
+  }
+  .book-page-left, .book-page-right {
+    max-height: none;
+    padding: 24px 20px;
+    box-shadow: none;
+    border: none;
+  }
+  .chapter-tabs-container {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    gap: 8px;
+  }
+  .chapter-tab {
+    border: 1px solid var(--color-gold-accent);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+  .chapter-tab:hover, .chapter-tab.active {
+    transform: translateY(-2px);
+  }
+}
