@@ -42,6 +42,7 @@
       --bg-glass: rgba(11, 28, 19, 0.65);
       --bg-glass-hover: rgba(22, 54, 37, 0.8);
       --bg-glass-border: rgba(255, 255, 255, 0.08);
+      --bg-alt: rgba(11, 28, 19, 0.4);
       
       /* Text Colors */
       --text-dark: #000000;
@@ -1427,7 +1428,7 @@ function renderVarietySheet() {
                 <strong>${v.icon} ${escapeHTML(v.name)}</strong>
                 <span>${escapeHTML(v.tagline)}</span>
               </div>
-              <span class="v-sheet-count">20</span>
+              <span class="v-sheet-count">${getRecipes().filter(r => r.varietyId === v.id).length}</span>
             </button>
           `).join('')}
         </div>
@@ -1495,7 +1496,7 @@ function renderHeader() {
   return `
     <header class="header">
       <a href="#" class="header-brand" onclick="setFilter('v', 'all'); return false;">
-        <img src="./assets/images/logo.png" alt="Grevara" class="header-logo" />
+        <div class="header-logo" style="display:flex; align-items:center; justify-content:center; background:var(--gold-main); color:var(--green-dark); font-weight:bold; border-radius:8px;">G</div>
         <div class="header-titles">
           <span class="header-title">GREVARA</span>
           <span class="header-subtitle">Global Culinary Compendium</span>
@@ -1590,6 +1591,10 @@ function renderMobileNav() {
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
         <span>Top</span>
       </button>
+      <a href="grevara-catalog.pdf" target="_blank" class="mobile-nav-item" style="text-decoration:none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span>Catalog</span>
+      </a>
     </nav>
   `;
 }
@@ -1602,12 +1607,12 @@ function renderTabs() {
       <div class="variety-tabs">
         <button class="v-tab ${S.variety === 'all' ? 'active' : ''}" onclick="setFilter('v', 'all')">
           <span class="v-tab-text">🌱 All Varieties</span>
-          <span class="v-count">100</span>
+          <span class="v-count">${getRecipes().length}</span>
         </button>
         ${vars.map(v => `
           <button class="v-tab ${S.variety === v.id ? 'active' : ''}" onclick="setFilter('v', '${v.id}')" ${S.variety === v.id ? `style="box-shadow: 0 0 15px ${v.accentColor}40; border-color: ${v.accentColor};"` : ''}>
             <span class="v-tab-text">${v.icon} ${escapeHTML(v.name)}</span>
-            <span class="v-count">20</span>
+            <span class="v-count">${getRecipes().filter(r => r.varietyId === v.id).length}</span>
           </button>
         `).join('')}
       </div>
@@ -1629,7 +1634,7 @@ function renderGrid() {
 
   const statusHeader = `
     <div class="anim" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; margin-bottom: 1.25rem; padding: 0.75rem 1.25rem; background: var(--bg-alt); border-radius: 12px; border: 1px solid var(--gold-subtle);">
-      <div style="font-size: 0.9rem; color: var(--green-dark);">
+      <div style="font-size: 0.9rem; color: var(--text-muted);">
         Showing <strong>${recipes.length}</strong> of <strong>${totalForVariety}</strong> ${varietyName} Dishes ${isFiltered ? `<span style="font-size:0.8rem; color:var(--text-muted);">(Filtered by ${[S.region !== 'All' ? 'Region: '+S.region : '', S.mealType !== 'All' ? 'Meal: '+S.mealType : '', S.query ? 'Search: "'+S.query+'"' : ''].filter(Boolean).join(', ')})</span>` : ''}
       </div>
       ${isFiltered ? `
@@ -1836,6 +1841,40 @@ document.addEventListener('keydown', e => {
 
 render();
 
+// --- Scroll-to-top FAB ---
+const fab = document.createElement('button');
+fab.id = 'scrollTopBtn';
+fab.innerHTML = '↑';
+fab.style.cssText = 'position:fixed;bottom:2rem;right:2rem;z-index:500;width:44px;height:44px;border-radius:50%;background:var(--gold-main);color:var(--green-dark);border:none;font-size:1.2rem;font-weight:700;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.3);transition:all 0.3s ease;';
+fab.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+document.body.appendChild(fab);
+window.addEventListener('scroll', () => { fab.style.display = window.scrollY > 300 ? 'flex' : 'none'; });
+
+// --- iOS Install Fallback Modal (injected once, hidden by default) ---
+const iosModal = document.createElement('div');
+iosModal.id = 'iosInstallModal';
+iosModal.style.cssText = 'display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center;padding:1rem;';
+iosModal.innerHTML = `
+  <div style="background:#0B1C13;border:1px solid rgba(212,175,55,0.4);border-radius:20px;padding:1.75rem;width:100%;max-width:400px;margin-bottom:1rem;">
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+      <img src="./assets/images/icon-192.png" style="width:48px;height:48px;border-radius:12px;" alt="Grevara">
+      <div>
+        <div style="color:#E5C158;font-weight:700;font-size:1.05rem;">Install Grevara</div>
+        <div style="color:#9BAE9D;font-size:0.85rem;">Add to your Home Screen</div>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:1rem;margin-bottom:1rem;">
+      <p style="color:#F4F6F5;font-size:0.9rem;line-height:1.6;">
+        <strong style="color:#E5C158;">Step 1:</strong> Tap the <strong>Share</strong> button <span style="font-size:1.2rem;">&#x2B06;</span> at the bottom of your Safari browser.<br><br>
+        <strong style="color:#E5C158;">Step 2:</strong> Scroll down and tap <strong>"Add to Home Screen"</strong>.<br><br>
+        <strong style="color:#E5C158;">Step 3:</strong> Tap <strong>"Add"</strong> to install Grevara!
+      </p>
+    </div>
+    <button onclick="document.getElementById('iosInstallModal').style.display='none'" style="width:100%;padding:0.75rem;background:#E5C158;color:#07100B;border:none;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;">Got it!</button>
+  </div>
+`;
+document.body.appendChild(iosModal);
+
 // --- PWA INSTALL LOGIC ---
 let deferredPrompt = null;
 
@@ -1857,16 +1896,21 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 function installApp() {
+  // iOS Safari fallback
+  const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+  const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+  if (isIos && !isInStandaloneMode) {
+    const modal = document.getElementById('iosInstallModal');
+    if (modal) modal.style.display = 'flex';
+    return;
+  }
   if (deferredPrompt) {
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then((result) => {
-      if (result.outcome === 'accepted') {
-        console.log('App installed!');
-        const btn = document.getElementById('installBtn');
-        if (btn) btn.style.display = 'none';
-        const banner = document.getElementById('installBanner');
-        if (banner) banner.style.display = 'none';
-      }
+      const btn = document.getElementById('installBtn');
+      if (btn) btn.style.display = 'none';
+      const banner = document.getElementById('installBanner');
+      if (banner) banner.style.display = 'none';
       deferredPrompt = null;
     });
   }
@@ -1879,7 +1923,6 @@ function dismissInstallBanner() {
 }
 
 window.addEventListener('appinstalled', () => {
-  console.log('Grevara app was installed!');
   deferredPrompt = null;
   const btn = document.getElementById('installBtn');
   if (btn) btn.style.display = 'none';
@@ -1887,15 +1930,29 @@ window.addEventListener('appinstalled', () => {
   if (banner) banner.style.display = 'none';
 });
 
+// iOS: auto-show install button in header so iOS users can tap it
+(function() {
+  const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+  const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+  if (isIos && !isInStandaloneMode) {
+    setTimeout(() => {
+      const btn = document.getElementById('installBtn');
+      if (btn) btn.style.display = 'flex';
+      // Also show the install banner after 3 seconds
+      setTimeout(() => {
+        const banner = document.getElementById('installBanner');
+        if (banner && !sessionStorage.getItem('installDismissed')) banner.style.display = 'flex';
+      }, 3000);
+    }, 500);
+  }
+})();
+
 // Service Worker Registration
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then(registration => {
-      console.log('SW registered: ', registration);
       registration.update();
-    }).catch(registrationError => {
-      console.log('SW registration failed: ', registrationError);
-    });
+    }).catch(() => {});
   });
 }
 
